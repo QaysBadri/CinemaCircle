@@ -3,18 +3,30 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 func helloHandler(w http.ResponseWriter, r *http.Request) {
-    // Set the Content-Type header to indicate JSON data (optional).
     w.Header().Set("Content-Type", "application/json")
-
-    // Write the "Hello, World!" string to the response.
-    fmt.Fprintf(w, `{"message": "Hello, World!"}`)
+    fmt.Fprintf(w, `{"message": "Hello World"}`)
 }
 
 func main() {
-    http.HandleFunc("/hello", helloHandler)
+    //Creating a new router using mux
+    r := mux.NewRouter()
+
+    //API routes
+    r.HandleFunc("/hello", helloHandler)
+
+    //handler
+    c := cors.AllowAll()
+
+    //CORS middleware wrapper
+    handler := c.Handler(r)
+
     fmt.Println("Server is running on :8080")
+    http.Handle("/", handler)
     http.ListenAndServe(":8080", nil)
 }
