@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import EditScreenInfo from "../../components/EditScreenInfo";
 import { Text, View } from "../../components/Themed";
 import axios from "axios";
+import SearchBar from "../../components/SearchBar";
 
 export default function TabOneScreen() {
   const [message, setMessage] = useState("empty");
@@ -23,6 +24,7 @@ export default function TabOneScreen() {
 
   return (
     <View style={styles.container}>
+      <SearchBar />
       <Text style={styles.title}>Tab One</Text>
       <Text style={styles.title}>{message}</Text>
       <View
@@ -39,7 +41,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    margin: 20,
   },
   title: {
     fontSize: 20,
