@@ -5,14 +5,16 @@ import EditScreenInfo from "../../components/EditScreenInfo";
 import { Text, View } from "../../components/Themed";
 import axios from "axios";
 import SearchBar from "../../components/SearchBar";
+import SearchResultsList from "../../components/SearchResultsList";
 
 export default function TabOneScreen() {
   const [message, setMessage] = useState("empty");
+  const [results, setResults] = useState<string[]>([]); // Annotate results as string[]
 
   useEffect(() => {
     console.log("Fetching data");
     axios
-      .get("http://10.10.0.11:8080/hello")
+      .get("http://192.168.1.3:8080/hello")
       .then((response) => {
         console.log("Response:", response);
         setMessage(response.data.message);
@@ -24,7 +26,8 @@ export default function TabOneScreen() {
 
   return (
     <View style={styles.container}>
-      <SearchBar />
+      <SearchBar setResults={setResults} />
+      <SearchResultsList results={results} />
       <Text style={styles.title}>Tab One</Text>
       <Text style={styles.title}>{message}</Text>
       <View
