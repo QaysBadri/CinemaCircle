@@ -14,7 +14,7 @@ export default function TabOneScreen() {
   useEffect(() => {
     console.log("Fetching data");
     axios
-      .get("http://192.168.1.3:8080/hello")
+      .get("http://10.0.0.53:8080/hello")
       .then((response) => {
         console.log("Response:", response);
         setMessage(response.data.message);
