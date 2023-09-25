@@ -1,22 +1,26 @@
 import React, { useState } from "react";
-import { TextInput, View, StyleSheet, Platform } from "react-native";
+import { TextInput, View, StyleSheet, Platform, Text, FlatList } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import axios from "axios";
 
 interface SearchBarProps {
   setResults: (results: string[]) => void;
+  results: string[];
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ setResults }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ setResults, results }) => {
   const [text, setText] = useState("");
+
+  //insert your backend IP here:
+  const backendIp = "192.168.56.1"
 
   const fetchData = (value: string) => {
     console.log("Fetching data");
     axios
-      .get(`http://10.0.0.53:8080/hello?value=${value}`)
+      .get(`http://${backendIp}:8080/search?query=${value}`)
       .then((response) => {
         console.log("Response:", response);
-        const results = [response.data.message]; // Assuming the "message" property contains "Hello World!"
+        const results = response.data;
         setResults(results);
       })
       .catch((error) => {
@@ -54,10 +58,19 @@ const SearchBar: React.FC<SearchBarProps> = ({ setResults }) => {
             return { borderColor: "transparent", borderWidth: 0 };
           }
         }}
-      />
+        />
+      {/* these lines of code are broken */}
+      {results.length > 0 && (
+        <FlatList
+          data={results}
+          renderItem={({ item }) => <Text>{item}</Text>}
+          keyExtractor={(item) => item}
+        />
+      )}
     </View>
   );
 };
+  
 
 const styles = StyleSheet.create({
   inputWrapper: {
