@@ -47,6 +47,7 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
     defer db.Close()
 
     //database query to select only the movie titles from the azuredb
+    // need to create a better searching algorithm for when we get a bigger database
     rows, err := db.Query("SELECT series_title FROM movies WHERE series_title ILIKE '%' || $1 || '%' LIMIT 5", query)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -76,12 +77,24 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
     w.Write(jsonResponse)
 }
 
+func preflightHandler(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Access-Control-Allow-Origin", "*") // Replace with your allowed origins
+    w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS") // Adjust allowed methods
+    w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type") // Adjust allowed headers
+
+    if r.Method == "OPTIONS" {
+        w.WriteHeader(http.StatusOK)
+        return
+    }
+}
 
 
 
 func main() {
     
     r := mux.NewRouter()
+
+    r.Methods("OPTIONS").HandlerFunc(preflightHandler)
 
     // API routes go here
     r.HandleFunc("/hello", helloHandler)
