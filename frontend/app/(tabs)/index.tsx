@@ -11,10 +11,13 @@ export default function TabOneScreen() {
   const [message, setMessage] = useState("empty");
   const [results, setResults] = useState<string[]>([]); // Annotate results as string[]
 
+  //insert your backend IP here:
+  const backendIp = "192.168.56.1"
+
   useEffect(() => {
     console.log("Fetching data");
     axios
-      .get("http://10.0.0.53:8080/hello")
+      .get(`http://${backendIp}:8080/hello`)
       .then((response) => {
         console.log("Response:", response);
         setMessage(response.data.message);
