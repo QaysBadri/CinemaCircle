@@ -13,7 +13,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ setResults }) => {
   const fetchData = (value: string) => {
     console.log("Fetching data");
     axios
-      .get(`http://192.168.1.3:8080/hello?value=${value}`)
+      .get(`http://10.0.0.53:8080/hello?value=${value}`)
       .then((response) => {
         console.log("Response:", response);
         const results = [response.data.message]; // Assuming the "message" property contains "Hello World!"
@@ -26,7 +26,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ setResults }) => {
 
   const handleChange = (value: string) => {
     setText(value);
-    fetchData(value);
+    if (value.trim() !== "") {
+      fetchData(value);
+    } else {
+      // Clear the results if the search bar is empty
+      setResults([]);
+    }
   };
 
   return (
